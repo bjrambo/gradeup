@@ -1,0 +1,251 @@
+<load target="css/default.css" />
+<load target="js/default.js" />
+
+<!--//메세지(팝업형태) -->
+<div cond="$XE_VALIDATOR_MESSAGE">
+	<p>{alertScript($XE_VALIDATOR_MESSAGE)}</p>
+</div>
+
+<div id="gradeup_explain">
+	<!--// 상단텍스트-->
+	<div><!--#include("_header.html")--></div>
+	
+	<!--//타이틀-->
+	<div class="explain_title_wrap">
+		<img src="img/title3.png" alt="title_img" style="vertical-align:middle; margin:5px 10px" />
+		<a class="explain_title" href="{getUrl('','mid','gradeup')}">XE센터 등업안내</a>
+		<a class="admin_link" href="{getUrl('','module','admin','act','dispGradeupAdminModuleInfo')}" target="_blank" cond="$grant->manager">관리자모드<img src="img/setting.png" alt="setting_img" /></a>
+		<div class="explain">등급별로 다양한 혜택이 있으니 열심히 활동해서 등업해보자구요!</div>
+	</div>
+	
+	<!--//등급안내-->
+	<div class="grade_info_box">
+		<div class="grade_info" loop="$module_config->gradeup_condition => $key, $val">
+			<div class="grade_title">
+				<span class="priority priority_{$val['gradeup_priority']}">{$val['gradeup_priority']}</span>
+				<span class="group_name">{$val['group_name']}</span>
+			</div>
+			<div class="grade_condition">
+				<div cond="$val['group_explain']">
+					<span>{$val['group_explain']}</span>
+				</div>
+				<div cond="$val['gradeup_type']">
+					<span class="condition_type">{$val['gradeup_type']}</span> : 
+					<span class="condition_num">{$val['gradeup_date']}</span>일간
+					<!--@if($val['gradeup_doc'])-->게시글수 <span class="condition_num">{$val['gradeup_doc']}</span>개, <!--@end-->
+					<!--@if($val['gradeup_com'])-->덧글수 <span class="condition_num">{$val['gradeup_com']}</span>개, <!--@end-->
+					<!--@if($val['gradeup_lv'])-->레벨 <span class="condition_num">{$val['gradeup_lv']}</span> <!--@end-->
+					<span cond="$val['gradeup_type'] == '승인등업'">만족시 등업 신청가능.</span>
+					<span cond="$val['gradeup_type'] == '자동등업'">만족시 자동등업.</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!--//회원정보-->
+	<div class="member_info_box" cond="$logged_info">
+		<div class="member_left_wrap">
+			<img class="member_profile_img" src="{$logged_info->profile_image->src}" cond="$logged_info->profile_image->src" />
+			<img class="member_profile_img" src="img/user.png" cond="!$logged_info->profile_image->src" />
+		</div>
+		<div class="member_right_wrap">
+			<div class="member_info">
+				{$logged_info->nick_name}({$logged_info->user_id})님은 현재 
+				<span style="color:lightseagreen; font-weight:bold;" loop="$logged_info->group_list => $key,$val">{$val} </span>입니다.
+			</div>
+			<div class="member_grade_info" loop="$module_config->gradeup_condition => $key, $val" cond="$val['gradeup_type']">
+				<span class="priority priority_{$val['gradeup_priority']}">{$val['gradeup_priority']}</span>
+				<span>{$val['group_name']}</span>　
+				<span class="condition_num">{$val['gradeup_date']}</span> 일간　
+				게시물 : <span class="condition_num">{$val['doc_count']}</span> 개　
+				댓글 : <span class="condition_num">{$val['com_count']}</span> 개　
+				레벨: <span class="condition_num">{$val['lv']}</span>　
+				가입일 : {date('Y.m.d.',strtotime($logged_info->regdate))}
+				<span cond="$val['condition']" style="font-weight:bold; font-size:10px; margin-left:10px; padding:2px 4px; display:inline-block; border-radius:3px; background:yellowgreen; color:#fff;">O</span>
+				<span cond="!$val['condition']" style="font-weight:bold; font-size:10px; margin-left:10px; padding:2px 4px; display:inline-block; border-radius:3px; background:tomato; color:#fff;">X</span>
+			</div>
+		</div>
+	</div>
+	
+	<!--// 등업버튼 -->
+	<div class="application_btn">
+		<div class="btn red_bg" style="margin-right:10px;" <!--@if($logged_info)-->onclick="jQuery('div.application_form_wrap').fadeIn()"<!--@else-->onclick="alert('로그인후 이용가능합니다.')"<!--@end-->>등업신청하기</div>
+		<form action="./" method="post" style="display:inline">
+			<input type="hidden" name="act" value="procGradeupConfirmGroupCancel" />
+			<button type="submit" class="btn blue_bg" onclick="return confirm('등업신청을 취소합니다.');" cond="$logged_info">등업신청취소</button>
+			<button type="button" class="btn blue_bg" onclick="alert('로그인후 이용가능합니다.')" cond="!$logged_info">등업신청취소</button>
+		</form>
+	</div>
+	
+	<!--//신청리스트-->
+	<table summary="등업 신청 리스트" class="user_list">
+		<thead>
+			<tr>
+				<th>신청회원</th>
+				<th>각오한마디</th>
+				<th>현재등급</th>
+				<th>신청등급</th>
+				<th>기간</th>
+				<th>게시물수</th>
+				<th>댓글수</th>
+				<th>레벨</th>
+				<th>신청일</th>
+				<th>조건</th>
+				<th cond="$grant->manager">처리</th>
+			</tr>
+		</thead>
+		<tbody>
+			<block loop="$log_info => $key, $val">
+				<tr>
+					<td style="text-align:initial;">
+						{@  $oMemberModel = &getModel('member');  
+							$member_info = $oMemberModel->getMemberInfoByMemberSrl($val->member_srl); 
+						}
+						<a class="member_{$val->member_srl}" href="#" onclick="return false" style="margin:0px 20px;">{$member_info->nick_name}</a>
+					</td>
+					<td style="position:relative;">
+						<span class="user_text_btn" style="cursor:pointer; padding:7px;">보기</span>
+						<span style="position:absolute; top:10px; left:70px; display:none; white-space:normal; width:350px; background:gold; z-index:1; margin-right:100px; padding:10px; border:1px solid #ddd; border-radius:3px;">{$val->user_text}</span>
+					</td>
+					<td style="text-align:initial;">
+						<span style="padding-left:20px;">{$val->old_group_srl_title}</span>
+					</td>
+					<td>{$val->add_group_srl_title}</td>
+					<td>{$val->condition_date} 일간</td>
+					<td>{$val->condition_doc} 개</td>
+					<td>{$val->condition_com} 개</td>
+					<td>{$val->condition_lv}</td>
+					<td>{date("Y. m. d.",strtotime($val->regdate));}</td>
+					<td>
+						<span cond="$val->condition_result == 'ok'" style="color:yellowgreen; font-weight:bold;">O</span>
+						<span cond="$val->condition_result == 'no'" style="color:tomato; font-weight:bold;">X</span>
+					</td>
+					<td cond="$grant->manager">
+						<form action="./" method="post" style="display:inline">
+							<input type="hidden" name="act" value="procGradeupConfirmGroupProcess" />
+							<input type="hidden" name="log_srl" value="{$val->log_srl}"/>
+							<input type="hidden" name="state" value="ok"/>
+							<button type="submit" style="cursor:pointer; color:#00A0EF; outline:none; border:none; background:none;" onclick="return confirm('신청을 승인합니다.');">승인</button>
+						</form>
+						<div style="cursor:pointer; color:tomato; display:inline-block;" onclick="refuse_application({$val->log_srl},{$val->member_srl})">거절</div>
+					</td>
+				</tr>
+			</block>
+		</tbody>
+	</table>
+	
+	<!--// 페이지 네비게이션 -->
+	<div class="page_navi" cond="$module_config->user_list_use != 'no'"> 
+		<a href="{getUrl('page','','module_srl','')}">처음</a> 
+		<block loop="$page_no = $page_navigation->getNextPage()">
+			<a cond="$page == $page_no" class="page_seleted"><strong cond="$page_no == $page">{$page_no}</strong></a>
+			<a cond="$page != $page_no" href="{getUrl('page',$page_no,'module_srl','')}">{$page_no}</a> 
+		</block>
+		<a href="{getUrl('page',$page_navigation->last_page,'module_srl','')}" >맨뒤</a>
+	</div>
+	
+	<!--//신청거절폼 (관리자만 볼수있도록)-->
+	<div class="application_cancel_wrap" cond="$grant->manager">
+		<div class="application_bg" onclick="jQuery('div.application_cancel_wrap').fadeOut()"></div>
+		<div class="application_form">
+			<form action="./" method="post">
+				<input type="hidden" name="act" value="procGradeupConfirmGroupProcess" />
+				<input type="hidden" name="state" value="no" />
+				<input type="hidden" name="member_srl" id="refuse_member_srl" value="" />
+				<input type="hidden" name="log_srl" id="refuse_log_srl" value="" />
+				<table summary="등업 신청폼 입니다" class="application_table">
+					<tbody>
+						<tr>
+							<th>쪽지제목</th>
+							<td>
+								<input type="text" class="input_text" name="refuse_msg_title" style="margin-left:10px;" value="등업신청이 거절되었습니다." />
+							</td>
+						</tr>
+						<tr>
+							<th>거절사유</th>
+							<td>
+								<textarea class="refuse_msg_content" name="refuse_msg_content" style="margin-left:10px;" placeholder="거절사유 미입력시 쪽지를 발송하지 않습니다"></textarea>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2" style="text-align:center;">
+								<input class="ss_btn black_bg" type="submit" value="확인" />
+								<span class="ss_btn red_bg" onclick="jQuery('div.application_cancel_wrap').fadeOut()">취소</span> 
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</form>
+		</div>
+	</div>
+	
+	<!--//등업신청폼-->
+	<div class="application_form_wrap">
+		<div class="application_bg" onclick="jQuery('div.application_form_wrap').fadeOut()"></div>
+		<div class="application_form">
+			<form action="./" method="post">
+				<input type="hidden" name="act" value="procGradeupConfirmGroup" />
+				<table summary="등업 신청폼 입니다" class="application_table">
+					<tbody>
+						<tr>
+							<td colspan="2" style="text-align:center;">
+								{$logged_info->nick_name} ({$logged_info->user_id})
+							</td>
+						</tr>
+						<tr>
+							<th>현재등급</th>
+							<td>
+								<select style="margin-left:10px;">
+									<option loop="$logged_info->group_list => $key, $val" value="{$val}">{$val}</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<th>신청등급</th>
+							<td>
+								<select name="add_group_srl" style="margin-left:10px;">
+									<option loop="$module_config->gradeup_condition => $key, $val" value="{$val['gradeup_group_srl']}" cond="!in_array($val['group_name'],$logged_info->group_list)">{$val['group_name']}</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<th>각오한마디</th>
+							<td>
+								<textarea name="user_text" style="margin-left:10px;" placeholder="간단한 각오 한마디를 남겨주세요"></textarea>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2" style="text-align:center;">
+								<input class="ss_btn black_bg" type="submit" value="신청" />
+								<span class="ss_btn red_bg" onclick="jQuery('div.application_form_wrap').fadeOut()">취소</span> 
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</form>
+		</div>
+	</div>
+	
+	<!--// 하단텍스트 -->
+	<div><!--#include("_footer.html")--></div>
+</div>
+
+
+<script type="text/javascript">
+jQuery(function($){
+	//각오 펼치기
+	$('.user_text_btn').mouseover(function(){
+		$(this).next('span').slideDown(200);
+	}).mouseout(function(){
+		$(this).next('span').slideUp(50);
+	});
+});
+
+//신청거절폼 
+function refuse_application(log_srl,member_srl){
+	jQuery('div.application_cancel_wrap').fadeIn(300);
+	jQuery('.refuse_msg_content').focus();
+	jQuery('#refuse_log_srl').val(log_srl);
+	jQuery('#refuse_member_srl').val(member_srl);
+}
+</script>

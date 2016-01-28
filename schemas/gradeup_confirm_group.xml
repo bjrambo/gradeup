@@ -1,0 +1,15 @@
+<table name="gradeup_confirm_group">
+    <column name="log_srl" type="number" size="11" notnull="notnull" auto_increment="auto_increment" primary_key="primary_key" />
+	<column name="member_srl" type="number" size="11" notnull="notnull" />
+	<column name="old_group_srl" type="varchar" size="128" notnull="notnull" />
+	<column name="add_group_srl" type="varchar" size="128" notnull="notnull" />
+	<column name="user_text" type="varchar" size="256" notnull="notnull" />
+	<column name="condition_date" type="date" notnull="notnull" />
+	<column name="condition_doc" type="varchar" size="128" notnull="notnull" />
+	<column name="condition_com" type="varchar" size="128" notnull="notnull" />
+	<column name="condition_lv" type="varchar" size="128" notnull="notnull" />
+	<column name="condition_result" type="varchar" size="128" notnull="notnull" />
+	<column name="state" type="varchar" size="128" notnull="notnull" />
+	<column name="regdate" type="date" notnull="notnull" />
+</table>
+

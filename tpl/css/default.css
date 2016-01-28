@@ -1,0 +1,49 @@
+.multi_select label{margin:0px; padding:5px 0px;}
+
+/*************************************** xecenter 프로그램 css공통 *************************************************/
+/*************************************** xecenter 프로그램 css공통 *************************************************/
+/*************************************** xecenter 프로그램 css공통 *************************************************/
+
+
+/** 테이블 **/
+.xecenter_table{width:100%;}
+.xecenter_table td{vertical-align:middle!important;}
+.xecenter_table a{text-decoration:none; color:black;}
+.xecenter_page_navi a{text-decoration:none!important; color:#555!important;}
+.xecenter_page_navi a strong{color:tomato; font-size:1.3em; font-weight:bold;}
+.text_center{text-align:center;}
+.ss_nowrap{white-space:nowrap;}
+
+/** 폼박스 **/
+.xecenter_form_box{margin:0 5px; padding:7px; border-radius:4px; background:#fff; border:1px solid #aaa; outline:none; box-shadow:0 0 1px #aaa;}
+.xecenter_form_box:hover{border:1px solid #5bc0de; background:#ffe;}
+.xecenter_form_box:focus{border:1px solid #5bc0de; background:#ffe;}
+
+
+/** 경계선 **/
+.xecenter_div_line{margin:10px 0px; width:100%; height:1px; background:#ddd; clear:both;} 
+
+
+/** 버튼정의 **/
+.xecenter_btn_blue{margin:3px; padding:10px; border-radius:5px; background:#428bca; color:white; border:none; outline:none; float:left;}
+.xecenter_btn_red{margin:3px; padding:10px; border-radius:5px; background:#D44B4B; color:white; border:none; outline:none; float:left;}
+.xecenter_btn_green{margin:3px; padding:10px; border-radius:5px; background:lightseagreen; color:white; border:none; outline:none; float:left;}
+.xecenter_btn_black{margin:3px; padding:10px; border-radius:5px; background:#555; color:white; border:none; outline:none; float:left;}
+.xecenter_btn_blue:hover{cursor:pointer; background:#207BCA;}
+.xecenter_btn_red:hover{cursor:pointer; background:#D52E2E;}
+.xecenter_btn_green:hover{cursor:pointer; background:#0FACC2;}
+.xecenter_btn_black:hover{cursor:pointer; background:#000;}
+
+
+/** 애니메이션 효과 **/
+.xecenter_effect{-webkit-transition:.3s linear; -moz-transition:.3s linear; -o-transition:.3s linear; transition:.3s linear;}
+
+/** 페이지 네비 **/
+.xecenter_page_navi{text-align:center;}
+.xecenter_page_navi .pg_select{border:1px solid #ddd; background:#eee; color:black;}
+.xecenter_page_navi a{font-weight:bold; color:#555; padding:5px 9px; display:inline-block; border-radius:3px; border:1px solid #fff;}
+.xecenter_page_navi a:hover{border:1px solid #ddd; background:#eee; }
+
+/** 텍스트효과 **/
+.xecenter_text{border:1px solid #fff; padding:4px; border-radius:5px;}
+.xecenter_text:hover{border:1px solid #ddd; background:#eee;}

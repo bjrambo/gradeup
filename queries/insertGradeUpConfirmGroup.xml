@@ -1,0 +1,19 @@
+<query id="insertGradeUpConfirmGroup" action="insert">
+    <tables>
+        <table name="gradeup_confirm_group" />
+    </tables>
+    <columns>
+		<column name="log_srl" var="log_srl" />
+		<column name="member_srl" var="member_srl" />
+		<column name="old_group_srl" var="old_group_srl" />
+		<column name="add_group_srl" var="add_group_srl" />
+		<column name="user_text" var="user_text" />
+		<column name="regdate" var="regdate" />
+		<column name="state" var="state" />
+		<column name="condition_date" var="condition_date" />
+		<column name="condition_doc" var="condition_doc" />
+		<column name="condition_com" var="condition_com" />
+		<column name="condition_lv" var="condition_lv" />
+		<column name="condition_result" var="condition_result" />
+    </columns>
+</query>

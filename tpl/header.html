@@ -1,0 +1,22 @@
+<!--//모듈소개-->
+<div class="x_page-header">
+	<h1>등업(그룹) 관리 모듈
+		<span class="path" cond="$module_info->mid">
+			&gt; <a href="{getSiteUrl($module_info->domain,'','mid',$module_info->mid)}" target="_blank"|cond="$module=='admin'">{$module_info->mid}</a>
+		</span>
+		<a href="#aboutModule" data-toggle class="x_icon-question-sign"></a>
+	</h1>
+</div>
+<!--//모듈 설명-->
+<p class="x_alert x_alert-info" id="aboutModule" hidden>여려가지 조건으로 등업 및 그룹 관리를 하는 모듈 입니다.</p>
+
+<!--//탭메뉴-->
+<ul class="x_nav x_nav-tabs">
+	<li class="x_active"|cond="$act=='dispGradeupAdminModuleInfo'"><a href="{getUrl('','module','admin','act','dispGradeupAdminModuleInfo')}">기본설정</a></li>
+	<li class="x_active"|cond="$act=='dispGradeupAdminGradeConfig'"><a href="{getUrl('','module','admin','act','dispGradeupAdminGradeConfig')}">등업설정</a></li>
+	<li class="x_active"|cond="$act=='dispGradeupAdminConfirmGroup'"><a href="{getUrl('','module','admin','act','dispGradeupAdminConfirmGroup')}">승인제 등업관리</a></li>
+	<li class="x_active"|cond="$act=='dispGradeupAdminTermGroup'"><a href="{getUrl('','module','admin','act','dispGradeupAdminTermGroup')}">기간제 등업관리</a></li>
+	<li class="x_active"|cond="$act=='dispGradeupAdminGradeLog'"><a href="{getUrl('','module','admin','act','dispGradeupAdminGradeLog')}">등업로그</a></li>
+	<li class="x_active"|cond="$act=='dispGradeupAdminGrantInfo'"><a href="{getUrl('','module','admin','act','dispGradeupAdminGrantInfo')}">권한설정</a></li>
+	<li class="x_active"|cond="$act=='dispGradeupAdminSkinInfo'"><a href="{getUrl('','module','admin','act','dispGradeupAdminSkinInfo')}">스킨정보</a></li>
+</ul>

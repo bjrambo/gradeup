@@ -1,0 +1,11 @@
+<query id="get_moduleInfo" action="select">
+    <tables>
+        <table name="modules" />
+    </tables>
+    <columns>
+        <column name="*" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="module" var="module" />
+    </conditions> 
+</query>

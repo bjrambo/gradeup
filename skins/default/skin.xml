@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin version="0.2">
+    <title xml:lang="ko">기본스킨</title>
+    <description xml:lang="ko">
+       모듈 기본스킨입니다.
+    </description>
+    <version>0.1</version>
+    <date>2015-07-30</date>
+    <author email_address="" link="http://www.xecenter.com">
+        <name xml:lang="ko">숭숭군</name>
+    </author>
+    <license>유료라이선스</license>
+</skin>

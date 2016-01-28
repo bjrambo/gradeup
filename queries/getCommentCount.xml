@@ -1,0 +1,12 @@
+<query id="getCommentCount" action="select">
+    <tables>
+        <table name="comments" />
+    </tables>
+    <columns>
+        <column name="count(*)" alias="count" />
+    </columns>
+    <conditions>
+		<condition operation="more" column="regdate" var="more_regdate" />
+		<condition operation="equal" column="abs(member_srl)" var="member_srl" filter="number" notnull="notnull" pipe="and" />
+    </conditions>
+</query>

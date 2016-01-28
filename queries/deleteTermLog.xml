@@ -1,0 +1,8 @@
+<query id="deleteTermLog" action="delete">
+    <tables>
+        <table name="gradeup_term_group" />
+    </tables>
+    <conditions>
+        <condition operation="equal" column="log_srl" var="log_srl" filter="number" />
+    </conditions>
+</query>

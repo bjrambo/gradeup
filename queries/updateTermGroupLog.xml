@@ -1,0 +1,12 @@
+<query id="updateTermGroupLog" action="update">
+    <tables>
+        <table name="gradeup_term_group" />
+    </tables>
+    <columns>
+        <column name="remain_date" var="remain_date" />
+        <column name="new_group_srl" var="new_group_srl" />
+	</columns>
+	<conditions>
+        <condition operation="equal" column="log_srl" var="log_srl" notnull="notnull" />
+    </conditions>
+</query>

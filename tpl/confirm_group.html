@@ -1,0 +1,203 @@
+<load target="css/default.css" />
+<load target="js/confirm_group.js" />
+<!--%load_js_plugin("ui.datepicker")-->
+
+<!--#include("./header.html")-->
+
+<!--// 메세지 -->
+<div cond="$XE_VALIDATOR_MESSAGE" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+	<p>{$XE_VALIDATOR_MESSAGE}</p>
+</div>
+
+<!--// 승인등업 페이지 바로가기 -->
+<div style="padding-left:20px; padding-bottom:15px;">
+	<span>여기는 승인등업 로그 페이지 입니다.</span><br/>
+	<span>등업신청에 대한 승인 및 거절은 승인등업 페이지에서 할 수 있습니다.</span><br/>
+	<a href="{getUrl('','act','dispGradeupConfirmGroup')}" target="_blank">승인등업 페이지 바로가기</a>
+</div>
+<div class="x_control-group"></div>
+
+<!--//검색기능 -->
+<div class="search">
+	<form action="./" method="get">
+		<input type="hidden" name="error_return_url" value="" />
+		<input type="hidden" name="module" value="{$module}" /> 
+		<input type="hidden" name="page" value="1" />
+		<!--//기간-->
+		<select name="search_day" id="search_day">
+			<option value="all" selected="selected"|cond="$search_day== 'all' ">전체</option>
+			<option value="last" selected="selected"|cond="$search_day== 'last' ">최근</option>
+			<option value="moreless" selected="selected"|cond="$search_day== 'moreless' ">기간</option>
+		</select>
+		<span id="day_last" style="display:none; margin-right:15px;"><input type="text" name="day_last" value="{$day_last}" style="width:50px;"/>일</span>
+		<span id="day_more" style="display:none;"><input type="text" name="day_more" class="inputDate" value="{$day_more}" style="width:80px;"/>부터</span>
+		<span id="day_less" style="display:none; margin-right:15px;"><input type="text" name="day_less" class="inputDate" value="{$day_less}" style="width:80px;"/>까지</span>
+		<!--//검색대상-->
+		<select name="search_target">
+			<option value="">검색대상</option>					
+			<option value="log_srl" selected="selected"|cond="$search_target == 'coupon_srl'">로그번호</option>
+			<option value="member_srl" selected="selected"|cond="$search_target == 'member_srl'">회원번호</option>
+			<option value="regdate" selected="selected"|cond="$search_target == 'regdate'">등업일시</option>
+			<option value="condition_result" selected="selected"|cond="$search_target == 'condition_result'">조건</option>
+			<option value="state" selected="selected"|cond="$search_target == 'state'">상태</option>
+		</select>
+		<input type="text" name="search_keyword" value="{htmlspecialchars($search_keyword)}" />
+		<select name="order_type">
+			<option value="desc" selected="selected"|cond="$order_type == 'desc'">오름차순</option>
+			<option value="asc" selected="selected"|cond="$order_type == 'asc'">내림차순</option>
+		</select>
+		<!--//목록수-->
+		<select name="list_count">
+			<option value="">목록수</option>
+			<option value="10" selected="selected"|cond="$list_count == '10'">10</option>
+			<option value="20" selected="selected"|cond="$list_count == '20'">20</option>
+			<option value="30" selected="selected"|cond="$list_count == '30'">30</option>
+			<option value="50" selected="selected"|cond="$list_count == '50'">50</option>
+			<option value="100" selected="selected"|cond="$list_count == '100'">100</option>
+			<option value="300" selected="selected"|cond="$list_count == '300'">300</option>
+		</select>
+		<div class="btn"><input type="submit" value="{$lang->cmd_search}" /></div>
+		<div class="btn"><a href="{getUrl('', 'module',$module, 'act',$act, 'search_target','', 'search_keyword','')}">{$lang->cmd_cancel}</a></div>
+	</form>
+</div>
+
+<!--// 로그캡션-->
+<caption>
+	<strong>로그:{number_format($total_count)} 페이지:{number_format($page)}/{number_format($total_page)}</strong>
+</caption>
+
+<!--// 로그 -->
+<form method="get" action="./" id="log_data_table" class="table even ss_nowrap">
+	<table cellpadding='6' cellspacing="0" border='0' style="width:100%">
+		<thead bgcolor="efefef">
+			<tr> 
+				<th scope="col"><input type="checkbox" title="모두체크하기" data-name="cart"/></th>
+				<th scope="col">로그번호</th>
+				<th scope="col">회원번호</th>
+				<th scope="col">닉네임</th>
+				<th scope="col">각오한마디</th>
+				<th scope="col">변경전그룹</th>
+				<th scope="col">등업신청그룹</th>
+				<th scope="col">등업신청일시</th>
+				<th scope="col">기간</th>
+				<th scope="col">게시글</th>
+				<th scope="col">댓글</th>
+				<th scope="col">레벨</th>
+				<th scope="col">조건</th>
+				<th scope="col">상태</th>
+			</tr>
+		</thead>
+		<tbody class="text_center">
+		<!--@foreach($log_info as $no => $log_info)-->
+			<tr>
+				<td><input type="checkbox" name="cart" value="{$log_info->log_srl}" /></td>
+				<td>{$log_info->log_srl}</td>
+				<td>
+					{@  $oMemberModel = &getModel('member');  
+						$member_info = $oMemberModel->getMemberInfoByMemberSrl($log_info->member_srl); 
+					}
+					<a href="{getUrl('act','dispGradeupAdminConfirmGroup','search_target','member_srl','search_day','all','search_keyword',$log_info->member_srl,'page',1)}" style="color:#000; text-decoration:none;">
+						{$log_info->member_srl} <!--@if($log_info->member_srl != '1')-->( {$member_info->user_id} )<!--@else-->( customer )<!--@end-->
+					</a>
+				</td>
+				<td>
+					{@  $oMemberModel = &getModel('member');  
+						$member_info = $oMemberModel->getMemberInfoByMemberSrl($log_info->member_srl); 
+					}
+					<a class="member_{$log_info->member_srl}" href="#" onclick="return false" style="margin-right:25px;">
+						<!--@if($member_info->nick_name)-->{$member_info->nick_name}<!--@else-->비회원<!--@end-->
+					</a>
+				</td>
+				<td style="position:relative;">
+					<span class="user_text_btn" style="cursor:pointer; padding:7px; padding-right:15px;">보기</span>
+					<span style="position:absolute; top:10px; left:50px; display:none; white-space:normal; width:400px; background:gold; z-index:1; margin-right:100px; padding:10px; border:1px solid #ddd; border-radius:3px;">{$log_info->user_text}</span>
+				</td>
+				<td>{$log_info->old_group_srl}</td>
+				<td>{$log_info->add_group_srl}</td>
+				<td>
+					<a href="{getUrl('act','dispGradeupAdminConfirmGroup','search_target','regdate','search_day','all','search_keyword',date('Ymd',strtotime($log_info->regdate)),'page',1)}" style="color:#000; text-decoration:none;">{date("Y년 m월 d일 H:i:s",strtotime($log_info->regdate));}</a>
+				</td>
+				<td>{$log_info->condition_date} 일</td>
+				<td>{$log_info->condition_doc} 개</td>
+				<td>{$log_info->condition_com} 개</td>
+				<td>{$log_info->condition_lv}</td>
+				<td>
+					<a href="{getUrl('act','dispGradeupAdminConfirmGroup','search_target','condition_result','search_day','all','search_keyword',$log_info->condition_result,'page',1)}" style="color:steelblue; font-weight:bold;" cond="$log_info->condition_result == 'ok'">O</a>
+					<a href="{getUrl('act','dispGradeupAdminConfirmGroup','search_target','condition_result','search_day','all','search_keyword',$log_info->condition_result,'page',1)}" style="color:tomato; font-weight:bold;" cond="$log_info->condition_result == 'no'">X</a>
+				</td>
+				<td>
+					<a href="{getUrl('act','dispGradeupAdminConfirmGroup','search_target','state','search_day','all','search_keyword',$log_info->state,'page',1)}"  style="color:lightseagreen; font-weight:bold;" cond="$log_info->state == 'ready'">대기</a>
+					<a href="{getUrl('act','dispGradeupAdminConfirmGroup','search_target','state','search_day','all','search_keyword',$log_info->state,'page',1)}"  style="color:steelblue; font-weight:bold;" cond="$log_info->state == 'ok'">승인</a>
+					<a href="{getUrl('act','dispGradeupAdminConfirmGroup','search_target','state','search_day','all','search_keyword',$log_info->state,'page',1)}"  style="color:tomato; font-weight:bold;" cond="$log_info->state == 'no'">거절</a>
+				</td>
+			</tr>
+		<!--@end-->
+		</tbody>
+	</table>
+	<!--// 로그삭제버튼 -->
+	<div style="padding:10px 0; margin:10px 0;">
+		<span class="btn x_pull-left"><button type="button" onclick="jsDeleteGradeConfirmLog(); return false;">선택삭제</button></span>
+		<span class="btn x_pull-left" style="margin-left:10px;"><button type="button" onclick="jsDeleteGradeConfirmLogAll(); return false;">전체삭제</button></span>
+	</div> 
+</form>
+
+
+<!--// 페이지 네비게이션 -->
+<div class="xecenter_page_navi" style="margin-top:20px;"> 
+	<a class="xecenter_effect" href="{getUrl('page','','module_srl','')}" >{$lang->first_page}</a> 
+	<block loop="$page_no = $page_navigation->getNextPage()">
+		<a cond="$page == $page_no" class="xecenter_page_navi xecenter_effect"><strong cond="$page_no == $page">{$page_no}</strong></a>
+		<a cond="$page != $page_no" class="xecenter_page_navi xecenter_effect" href="{getUrl('page',$page_no,'module_srl','')}">{$page_no}</a> 
+	</block>
+	<a class="xecenter_effect" href="{getUrl('page',$page_navigation->last_page,'module_srl','')}" >{$lang->last_page}</a>
+</div>
+
+
+<script type="text/javascript">
+//<![CDATA[
+jQuery(function($){
+	$('#search_day').change(function(){
+		var val = $(this).children("option:selected").val();
+		change(val);
+	});
+	function change(val){
+		if(val == 'all'){
+			$('#day_last').css("display", "none");
+			$('#day_more').css("display", "none");
+			$('#day_less').css("display", "none");
+		}else if(val == 'last'){
+			$('#day_last').css("display", "");
+			$('#day_more').css("display", "none");
+			$('#day_less').css("display", "none");
+		}else if(val == 'moreless'){
+			$('#day_last').css("display", "none");
+			$('#day_more').css("display", "");
+			$('#day_less').css("display", "");
+		}
+	}
+	change("{$search_day}");
+	
+	//각오 펼치기
+	$('.user_text_btn').mouseover(function(){
+		$(this).next('span').slideDown(200);
+	}).mouseout(function(){
+		$(this).next('span').slideUp(50);
+	});
+});
+//]]>
+</script>
+<script type="text/javascript">
+(function($){
+    $(function(){
+        var option = { changeMonth: true, changeYear: true, gotoCurrent: false,yearRange:'-100:+10', dateFormat:'yymmdd', onSelect:function(){
+
+            $(this).prev('input[type="hidden"]').val(this.value.replace(/-/g,""))}
+        };
+        $.extend(option,$.datepicker.regional['{$lang_type}']);
+        $(".inputDate").datepicker(option);
+		$(".dateRemover").click(function() {
+			$(this).prevAll('input').val('');
+			return false;});
+    });
+})(jQuery);
+</script>

@@ -1,0 +1,113 @@
+<load target="css/default.css" />
+<!--%load_js_plugin("ui.datepicker")-->
+
+<!--#include("./header.html")-->
+
+<!--// 메세지 -->
+<div cond="$XE_VALIDATOR_MESSAGE" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+	<p>{$XE_VALIDATOR_MESSAGE}</p>
+</div>
+
+<!--// 기간제 등업 정보 수정 -->
+<form action="./" class="x_form-horizontal" method="post">
+	<input type="hidden" name="module" value="{$module_info->module}" />
+	<input type="hidden" name="act" value="procGradeupAdminTermGroupAdd" />
+	<!--//회원번호 -->
+	<div class="x_control-group">
+		<label class="x_control-label">회원번호</label>
+		<div class="x_controls">
+			<input type="text" name="member_srl" value="{$info->member_srl}" style="width:110px" />
+		</div>
+	</div>
+	<!--//등업그룹 -->
+	<div class="x_control-group">
+		<label class="x_control-label">등업그룹</label>
+		<div class="x_controls">
+			<select name="group_srl" style="min-width:50px">
+				<option loop="$group_list => $key,$val" value="{$val->group_srl}">{$val->title}</option>
+			</select>
+		</div>
+	</div>
+	<!--//그룹추가형태 -->
+	<div class="x_control-group">
+		<label class="x_control-label">그룹추가형태</label>
+		<div class="x_controls">
+			<select name="gradeup_add_type" style="min-width:125px">
+				<option value="add"> 추가 </option>  
+				<option value="reset"> 초기화 </option> 
+			</select>
+		</div>
+	</div>
+	<!--//등업시작일 -->
+	<div class="x_control-group">
+		<label class="x_control-label">등업 시작일</label>
+		<div class="x_controls">
+			<input type="text" class="inputDate" name="regdate" id="regdate" value="{date('Ymd')}" style="width:110px" readonly />
+			<select name="regdate_h" style="min-width:30px">
+				<!--@for($i=0;$i<=23;$i++)-->
+				{@ $i = str_pad($i, 2, '0', STR_PAD_LEFT); }
+				<option value='{$i}'>{$i}시</option>
+				<!--@end-->
+			</select>
+			<select name="regdate_i" style="min-width:30px">
+				<!--@for($i=0;$i<=59;$i++)-->
+				{@ $i = str_pad($i, 2, '0', STR_PAD_LEFT); }
+				<option value='{$i}'>{$i}분</option>
+				<!--@end-->
+			</select>
+			<select name="regdate_s" style="min-width:30px">
+				<!--@for($i=0;$i<=59;$i++)-->
+				{@ $i = str_pad($i, 2, '0', STR_PAD_LEFT); }
+				<option value='{$i}'>{$i}초</option>
+				<!--@end-->
+			</select>
+		</div>
+	</div>
+	<!--//등업만료일 -->
+	<div class="x_control-group">
+		<label class="x_control-label">등업 만료일</label>
+		<div class="x_controls">
+			<input type="text" class="inputDate" name="remain_date" id="remain_date" value="{date('Ymd')}" style="width:110px" readonly />
+			<select name="remain_date_h" style="min-width:30px">
+				<!--@for($i=0;$i<=23;$i++)-->
+				{@ $i = str_pad($i, 2, '0', STR_PAD_LEFT); }
+				<option value='{$i}'<!--@if($i == '23')--> selected="selected"<!--@end-->>{$i}시</option>
+				<!--@end-->
+			</select>
+			<select name="remain_date_i" style="min-width:30px">
+				<!--@for($i=0;$i<=59;$i++)-->
+				{@ $i = str_pad($i, 2, '0', STR_PAD_LEFT); }
+				<option value='{$i}'<!--@if($i == '59')--> selected="selected"<!--@end-->>{$i}분</option>
+				<!--@end-->
+			</select>
+			<select name="remain_date_s" style="min-width:30px">
+				<!--@for($i=0;$i<=59;$i++)-->
+				{@ $i = str_pad($i, 2, '0', STR_PAD_LEFT); }
+				<option value='{$i}'<!--@if($i == '59')--> selected="selected"<!--@end-->>{$i}초</option>
+				<!--@end-->
+			</select>
+		</div>
+	</div>
+	<!--//저장버튼-->
+	<div class="x_clearfix btnArea">
+		<span class="x_pull-right"><input class="x_btn x_btn-primary" type="submit" value="추가" /></span>
+		<a class="x_pull-right btn" href="{getUrl('','module','admin','act','dispGradeupAdminTermGroup')}" style="margin-right:10px; background:lightslategray; color:white;">뒤로가기</a>
+	</div>
+</form>
+
+
+<script type="text/javascript">
+(function($){
+    $(function(){
+        var option = { changeMonth: true, changeYear: true, gotoCurrent: false,yearRange:'-100:+10', dateFormat:'yymmdd', onSelect:function(){
+
+            $(this).prev('input[type="hidden"]').val(this.value.replace(/-/g,""))}
+        };
+        $.extend(option,$.datepicker.regional['{$lang_type}']);
+        $(".inputDate").datepicker(option);
+		$(".dateRemover").click(function() {
+			$(this).prevAll('input').val('');
+			return false;});
+    });
+})(jQuery);
+</script>

@@ -1,0 +1,25 @@
+<query id="getConfirmGroupLog" action="select">
+    <tables>
+        <table name="gradeup_confirm_group" />
+    </tables>
+    <columns>
+        <column name="*" />
+    </columns>
+	<conditions>
+        <condition operation="equal" column="log_srl" var="s_log_srl" />
+		<condition operation="equal" column="member_srl" var="s_member_srl" pipe="and" />
+		<condition operation="notequal" column="member_srl" var="not_member_srl" pipe="and" />
+		<condition operation="equal" column="add_group_srl" var="s_add_group_srl" pipe="and" />
+		<condition operation="equal" column="condition_result" var="s_condition_result" pipe="and" />
+		<condition operation="equal" column="state" var="s_state" pipe="and" />
+		<condition operation="like_prefix" column="regdate" var="s_regdate" pipe="and" />
+		<condition operation="more" column="regdate" var="regdate_more" pipe="and" />
+		<condition operation="less" column="regdate" var="regdate_less" pipe="and" />
+    </conditions>
+	<navigation>
+        <index var="sort_index" default="log_srl" order="order_type" />
+        <list_count var="list_count" default="20" />
+        <page_count var="page_count" default="10" />
+        <page var="page" default="1" />
+    </navigation> 
+</query>

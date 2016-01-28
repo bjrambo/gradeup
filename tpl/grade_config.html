@@ -1,0 +1,171 @@
+<!--#include("./header.html")-->
+
+<!--// 메세지 -->
+<div cond="$XE_VALIDATOR_MESSAGE" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+	<p>{$XE_VALIDATOR_MESSAGE}</p>
+</div>
+
+<!--// 활동제한설정 -->
+<form action="./" class="x_form-horizontal" method="post">
+	<input type="hidden" name="module" value="{$module_info->module}" />
+	<input type="hidden" name="act" value="procGradeupAdminGradeConfig" />
+	<!--//활동제한설정-->
+	<section class="section">
+		<div class="x_control-group" style="padding-left:20px;">
+			<label for="gradeup_use" style="display:inline-block; margin-right:50px;">등업기능 사용
+				<input type="checkbox" name="gradeup_use" id="gradeup_use" value="yes" <!--@if($module_config->gradeup_use=='yes')-->checked="checked"<!--@end--> /> 
+			</label>
+			<a href="{getUrl('','module','admin','act','dispMemberAdminGroupList')}" target="_blank" style="color:#555; margin-right:20px;">그룹설정</a>
+			<a href="{getUrl('','module','admin','act','dispMemberAdminList')}" target="_blank" style="color:#555;">회원목록</a>
+		</div>
+		<div class="x_control-group" style="padding-left:20px;">
+			<span>일정 기간내에 글이나 댓글, 레벨이 충족되면 등업을 할수 있습니다.</span><br/>
+			<span>등업은 로그인시 조건충족을 확인하므로 조건이 충족되어도 로그인을 하지 않으면 등업이 되지 않을수도 있습니다.</span>
+		</div>
+		<!--//설명-->
+		<div>
+			<p id="gradeup_priority_help" class="x_help-block x_alert" hidden>
+				등업 순위를 설정해주세요. 모든그룹의 조건이 충족할 경우 등업순위가 높은 그룹을 기준으로 등업을 하게 됩니다. <br/>
+				예를들어 준회원 등업순위가 2이고, 정회원 등업순위가 1일경우 두개의 그룹모두 조건이 충족할때 등업순위가 높은 준회원으로 등업을 하게 됩니다. <br/>
+				숫자가 높을수록 등업순위가 높으며, 같은 숫자로 지정할경우 가장 뒤에있는 그룹으로 등업을 하게 됩니다. 미입력시 가장낮은 1로 설정이 됩니다.
+				
+			</p>
+			<p id="gradeup_date_help" class="x_help-block x_alert" hidden>등업조건에서 사용될 기간을 설정해주세요. 미입력시 전체 기간을 기준으로 합니다.</p>
+			<p id="gradeup_condition_help" class="x_help-block x_alert" hidden>
+				조건기간내 설정한 조건을 충족 시키면 등업이 가능합니다.<br/>
+				글,댓글,레벨중 설정된 조건을 만족해야 가능하며, 미입력된 조건은 적용하지 않습니다. 
+			</p>
+			<p id="gradeup_type_help" class="x_help-block x_alert" hidden>
+				자동등업 : 조건충족시 자동으로 등업합니다.<br/>
+				승인등업 : 조건충족시 등업신청을 할수 있습니다. 등업승인은 관리자가 할 수 있습니다.<br/>
+				기간제등업 : 조건충족시 자동으로 등업한 후 설정한 기간이 지나면 다시 원래그룹으로 돌아갑니다.
+			</p>
+			<p id="gradeup_remain_date_help" class="x_help-block x_alert" hidden>기간제 등업시에만 사용가능하며, 등업 후 그룹이 지속될 시간입니다. 설정한 시간이 지나면 바로직전 그룹으로 돌아갑니다.</p>
+			<p id="gradeup_add_type_help" class="x_help-block x_alert" hidden>등업시 그룹추가방법을 설정해주세요. 초기화 방식은 기존그룹을 초기화후 등업하는 방식이며, 추가방식은 기존 그룹에 추가적으로 그룹을 추가하여 등업하는 방식입니다.</p>
+		</div>	
+		<!--//테이블 클래스 구형 선택적사용-> table even ss_nowrap -->
+		<table class="x_table x_table-striped x_table-hover">
+			<thead>
+				<tr>
+					<th scope="col" class="nowr">그룹명 (group_srl)</th>
+					<th scope="col" class="nowr">등업순위 <a href="#gradeup_priority_help" style="margin-left:3px;" class="x_icon-question-sign" data-toggle>{$lang->help}</a></th>
+					<th scope="col" class="nowr">조건기간 (n일)<a href="#gradeup_date_help" style="margin-left:3px;" class="x_icon-question-sign" data-toggle>{$lang->help}</a></th>
+					<th scope="col" class="nowr" style="text-align:center;">등업조건 (n개 이상)<a href="#gradeup_condition_help" style="margin-left:3px;" class="x_icon-question-sign" data-toggle>{$lang->help}</a></th>
+					<th scope="col" class="nowr" style="text-align:center;">등업방식<a href="#gradeup_type_help" style="margin-left:3px;" class="x_icon-question-sign" data-toggle>{$lang->help}</a></th>
+					<th scope="col" class="nowr" style="text-align:center;">만료일설정 (n일)<a href="#gradeup_remain_date_help" style="margin-left:3px;" class="x_icon-question-sign" data-toggle>{$lang->help}</a></th>
+					<th scope="col" class="nowr" style="text-align:center;">그룹추가방식<a href="#gradeup_add_type_help" style="margin-left:3px;" class="x_icon-question-sign" data-toggle>{$lang->help}</a></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr loop="$group_list => $key,$val">
+					<!--//group_srl값 hidden으로 보냄-->
+					<input type="hidden" name="gradeup_condition[{$val->title}][gradeup_group_srl]"  value="{$val->group_srl}" />
+					<!--//그룹명-->
+					<td class="nowr">
+						{$val->title} ({$val->group_srl}) 
+						<span cond="$val->is_default == 'Y'" style="color:white; background:steelblue; font-weight:bold; font-size:11px; padding:3px 5px; border-radius:3px;">기본그룹</span>
+						<span cond="$val->is_admin == 'Y'" style="color:white; background:tomato; font-weight:bold; font-size:11px; padding:3px 5px; border-radius:3px;">관리그룹</span>
+					</td>
+					<!--// 등업순위-->
+					<td class="nowr">
+						<input type="text" style="width:30px;" name="gradeup_condition[{$val->title}][gradeup_priority]" value="{$module_config->gradeup_condition[$val->title]['gradeup_priority']}" />
+					</td>
+					<!--// 기간-->
+					<td class="nowr">
+						기간 <input type="text" style="width:30px;" name="gradeup_condition[{$val->title}][gradeup_date]" value="{$module_config->gradeup_condition[$val->title]['gradeup_date']}" />
+					</td>
+					<!--// 등업조건-->
+					<td class="nowr">
+						글 <input type="text" style="width:30px; margin-right:10px!important;" name="gradeup_condition[{$val->title}][gradeup_doc]" value="{$module_config->gradeup_condition[$val->title]['gradeup_doc']}" />
+						댓글 <input type="text" style="width:30px; margin-right:10px!important;" name="gradeup_condition[{$val->title}][gradeup_com]" value="{$module_config->gradeup_condition[$val->title]['gradeup_com']}" />
+						레벨 <input type="number" style="width:50px;" name="gradeup_condition[{$val->title}][gradeup_lv]" value="{$module_config->gradeup_condition[$val->title]['gradeup_lv']}" min="0" max="{$max_level}" />
+					</td>
+					<!--// 등업방식-->
+					<td class="nowr">
+						<select name="gradeup_condition[{$val->title}][gradeup_type]" style="width:120px">
+							<option value="auto" selected="selected"|cond="$module_config->gradeup_condition[$val->title]['gradeup_type'] == 'auto'"> 자동등업 </option> 
+							<option value="confirm" selected="selected"|cond="$module_config->gradeup_condition[$val->title]['gradeup_type'] == 'confirm'"> 승인등업 </option>  
+							<option value="term" selected="selected"|cond="$module_config->gradeup_condition[$val->title]['gradeup_type'] == 'term'"> 기간제등업 </option>
+						</select>
+					</td>
+					<!--// 기간제 등업의 기간-->
+					<td class="nowr">
+						등업후 <input type="text" style="width:30px;" name="gradeup_condition[{$val->title}][gradeup_remain_date]" value="{$module_config->gradeup_condition[$val->title]['gradeup_remain_date']}" disabled="disabled"|cond="$module_config->gradeup_condition[$val->title]['gradeup_type'] != 'term'" /> 일
+					</td>
+					<!--// 그룹추가방식-->
+					<td class="nowr">
+						<select name="gradeup_condition[{$val->title}][gradeup_add_type]" style="width:70px">
+							<option value="reset" selected="selected"|cond="$module_config->gradeup_condition[$val->title]['gradeup_add_type'] == 'reset'"> 초기화 </option> 
+							<option value="add" selected="selected"|cond="$module_config->gradeup_condition[$val->title]['gradeup_add_type'] == 'add'"> 추가 </option>  
+						</select>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</section>
+	<!--// 등업 축하쪽지 -->
+	<section class="section">
+		<h1>등업 축하쪽지</h1>
+		<!--//등업 축하쪽지 사용 -->
+		<div class="x_control-group">
+			<label class="x_control-label" for="gradeup_msg_use">★ 등업 축하쪽지 사용　</label>
+			<div class="x_controls">
+				<select name="gradeup_msg_use" id="gradeup_msg_use">
+					<option value="yes" selected="selected"|cond="$module_config->gradeup_msg_use== 'yes'">사용</option>
+					<option value="no" selected="selected"|cond="$module_config->gradeup_msg_use== 'no'">미사용</option>
+				</select>
+				<a href="#gradeup_msg_use_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="gradeup_msg_use_help" class="x_help-block x_alert" hidden>등업시 회원에게 축하 쪽지를 발송합니다.</p>
+			</div>
+		</div>
+		<!--//보내는 사람 (member_srl) -->
+		<div class="x_control-group">
+			<label class="x_control-label" for="garadeup_msg_member_srl">★ 보내는사람 (member_srl)</label>
+			<div class="x_controls">
+				<input type="text" name="garadeup_msg_member_srl" id="garadeup_msg_member_srl" value="{$module_config->garadeup_msg_member_srl}" />
+				<a href="#garadeup_msg_member_srl_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="garadeup_msg_member_srl_help" class="x_help-block x_alert" hidden>등업 축하 쪽지를 보내는사람 member_srl을 설정해주세요. 미입력시 4(관리자) 로 발송됩니다.</p>
+			</div>
+		</div>		
+		<!--//쪽지제목 -->
+		<div class="x_control-group">
+			<label class="x_control-label" for="garadeup_msg_title">★ 쪽지제목</label>
+			<div class="x_controls">
+				<input type="text" name="garadeup_msg_title" id="garadeup_msg_title" value="{$module_config->garadeup_msg_title}" />
+				<a href="#garadeup_msg_title_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="garadeup_msg_title_help" class="x_help-block x_alert" hidden>등업축하 쪽지의 제목을 설정해주세요.</p>
+			</div>
+		</div>		
+		<!--//자동등업 쪽지설정 -->
+		<div class="x_control-group">
+			<label class="x_control-label" for="gradeup_auto_msg">┏ 자동등업 쪽지내용　</label>
+			<div class="x_controls">
+				<textarea name="gradeup_auto_msg" id="gradeup_auto_msg">{$module_config->gradeup_auto_msg}</textarea>
+				<a href="#gradeup_auto_msg_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="gradeup_auto_msg_help" class="x_help-block x_alert" hidden>치환자를 사용하여 쪽지내용을 설정해주세요.<br>[nick_name]:회원닉네임, [group_name]:등업될 그룹이름, [enter]:한줄넘김</p>
+			</div>
+		</div>
+		<!--//수동등업 쪽지설정 -->
+		<div class="x_control-group">
+			<label class="x_control-label" for="gradeup_confirm_msg">┃ 수동등업 쪽지내용　</label>
+			<div class="x_controls">
+				<textarea name="gradeup_confirm_msg" id="gradeup_confirm_msg">{$module_config->gradeup_confirm_msg}</textarea>
+				<a href="#gradeup_confirm_msg_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="gradeup_confirm_msg_help" class="x_help-block x_alert" hidden>치환자를 사용하여 쪽지내용을 설정해주세요.<br>[nick_name]:회원닉네임, [group_name]:등업될 그룹이름, [enter]:한줄넘김</p>
+			</div>
+		</div>
+		<!--//기간제등업 쪽지설정 -->
+		<div class="x_control-group">
+			<label class="x_control-label" for="gradeup_term_msg">┗ 기간제등업 쪽지내용</label>
+			<div class="x_controls">
+				<textarea name="gradeup_term_msg" id="gradeup_term_msg">{$module_config->gradeup_term_msg}</textarea>
+				<a href="#gradeup_term_msg_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="gradeup_term_msg_help" class="x_help-block x_alert" hidden>치환자를 사용하여 쪽지내용을 설정해주세요.<br>[nick_name]:회원닉네임, [group_name]:등업될 그룹이름, [ramain_date]:만료일, [enter]:한줄넘김</p>
+			</div>
+		</div>
+	</section>
+	<!--//저장버튼-->
+	<div class="x_clearfix btnArea">
+		<span class="x_pull-right"><input class="x_btn x_btn-primary" type="submit" value="{$lang->cmd_save}" /></span>
+	</div>
+</form>

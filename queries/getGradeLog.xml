@@ -1,0 +1,26 @@
+<query id="getGradeLog" action="select">
+    <tables>
+        <table name="gradeup_log" />
+    </tables>
+    <columns>
+        <column name="*" />
+    </columns>
+	<conditions>
+        <condition operation="equal" column="log_srl" var="s_log_srl" />
+		<condition operation="equal" column="member_srl" var="s_member_srl" />
+		<condition operation="notequal" column="member_srl" var="not_member_srl" />
+		<condition operation="equal" column="gradeup_type" var="s_gradeup_type" />
+		<condition operation="equal" column="gradeup_add_type" var="s_gradeup_add_type" />
+		<condition operation="like_prefix" column="regdate" var="s_regdate" />
+		<condition operation="like_prefix" column="remain_date" var="s_remain_date" />
+		<condition operation="equal" column="ipaddress" var="s_ipaddress" />
+		<condition operation="more" column="regdate" var="regdate_more" pipe="and" />
+		<condition operation="less" column="regdate" var="regdate_less" pipe="and" />
+    </conditions>
+	<navigation>
+        <index var="sort_index" default="log_srl" order="order_type" />
+        <list_count var="list_count" default="20" />
+        <page_count var="page_count" default="10" />
+        <page var="page" default="1" />
+    </navigation> 
+</query>

@@ -1,0 +1,103 @@
+<load target="css/default.css" />
+<!--%load_js_plugin("ui.datepicker")-->
+
+<!--#include("./header.html")-->
+
+<!--// 메세지 -->
+<div cond="$XE_VALIDATOR_MESSAGE" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+	<p>{$XE_VALIDATOR_MESSAGE}</p>
+</div>
+
+<!--// 기간제 등업 정보 수정 -->
+<form action="./" class="x_form-horizontal" method="post">
+	<input type="hidden" name="module" value="{$module_info->module}" />
+	<input type="hidden" name="act" value="procGradeupAdminTermGroupModify" />
+	<input type="hidden" name="log_srl" value="{$info->log_srl}" />
+	<input type="hidden" name="member_srl" value="{$info->member_srl}" />
+	<!--//회원 -->
+	<div class="x_control-group">
+		<label class="x_control-label">회원</label>
+		<div class="x_controls">
+			{@  $oMemberModel = &getModel('member');  
+				$member_info = $oMemberModel->getMemberInfoByMemberSrl($info->member_srl); 
+			}
+			<a href="#popup_menu_area" class="member_{$member_info->member_srl} author" onclick="return false">{$member_info->nick_name} ( {$member_info->member_srl} )</a>
+		</div>
+	</div>
+	<!--//등업전그룹 -->
+	<div class="x_control-group">
+		<label class="x_control-label">등업전그룹</label>
+		<div class="x_controls">
+			<span>{$info->old_group_srl}</span>
+		</div>
+	</div>
+	<!--//등업그룹 -->
+	<div class="x_control-group">
+		<label class="x_control-label">등업그룹</label>
+		<div class="x_controls">
+			<span>{$info->add_group_srl}</span>
+		</div>
+	</div>
+	<!--//그룹추가방식 -->
+	<div class="x_control-group">
+		<label class="x_control-label">그룹추가방식</label>
+		<div class="x_controls">
+			<span cond="$info->gradeup_add_type == 'reset'">초기화</span>
+			<span cond="$info->gradeup_add_type == 'add'">그룹추가</span>
+		</div>
+	</div>
+	<!--//등업일 -->
+	<div class="x_control-group">
+		<label class="x_control-label">등업 시작일</label>
+		<div class="x_controls">
+			<span>{zdate($info->regdate,'Y-m-d H:i')}</span>
+		</div>
+	</div>
+	<!--//등업만료일 -->
+	<div class="x_control-group">
+		<label class="x_control-label">등업 만료일</label>
+		<div class="x_controls">
+			<input type="text" class="inputDate" name="remain_date" id="remain_date" value="{zdate($info->remain_date,'Ymd',false)}" style="width:110px" readonly />
+			<select name="remain_date_h" style="min-width:30px">
+				<!--@for($i=0;$i<=23;$i++)-->
+				{@ $i = str_pad($i, 2, '0', STR_PAD_LEFT); }
+				<option value='{$i}'<!--@if(zDate($info->remain_date,'H')==$i)--> selected="selected"<!--@end-->>{$i}시</option>
+				<!--@end-->
+			</select>
+			<select name="remain_date_i" style="min-width:30px">
+				<!--@for($i=0;$i<=59;$i++)-->
+				{@ $i = str_pad($i, 2, '0', STR_PAD_LEFT); }
+				<option value='{$i}'<!--@if(zDate($info->remain_date,'i')==$i)--> selected="selected"<!--@end-->>{$i}분</option>
+				<!--@end-->
+			</select>
+			<select name="remain_date_s" style="min-width:30px">
+				<!--@for($i=0;$i<=59;$i++)-->
+				{@ $i = str_pad($i, 2, '0', STR_PAD_LEFT); }
+				<option value='{$i}'<!--@if(zDate($info->remain_date,'s')==$i)--> selected="selected"<!--@end-->>{$i}초</option>
+				<!--@end-->
+			</select>
+		</div>
+	</div>
+	<!--//저장버튼-->
+	<div class="x_clearfix btnArea">
+		<span class="x_pull-right"><input class="x_btn x_btn-primary" type="submit" value="수정" /></span>
+		<a class="x_pull-right btn" href="{getUrl('','module','admin','act','dispGradeupAdminTermGroup')}" style="margin-right:10px; background:lightslategray; color:white;">뒤로가기</a>
+	</div>
+</form>
+
+
+<script type="text/javascript">
+(function($){
+    $(function(){
+        var option = { changeMonth: true, changeYear: true, gotoCurrent: false,yearRange:'-100:+10', dateFormat:'yymmdd', onSelect:function(){
+
+            $(this).prev('input[type="hidden"]').val(this.value.replace(/-/g,""))}
+        };
+        $.extend(option,$.datepicker.regional['{$lang_type}']);
+        $(".inputDate").datepicker(option);
+		$(".dateRemover").click(function() {
+			$(this).prevAll('input').val('');
+			return false;});
+    });
+})(jQuery);
+</script>

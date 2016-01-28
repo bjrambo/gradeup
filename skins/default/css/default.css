@@ -1,0 +1,90 @@
+/* 기본 */
+#gradeup_explain{padding:15px; background:#f7f7f7;}
+#gradeup_explain .condition_num{font-weight:bold;}
+#gradeup_explain .priority{margin-right:4px; position:relative; top:-1px; font-size:10px; padding:1px 3px; color:white; border-radius:3px; background-color:#333;}
+#gradeup_explain .priority_1{background:slateblue;}
+#gradeup_explain .priority_2{background:#6277B8;}
+#gradeup_explain .priority_3{background:#72A82A;}
+#gradeup_explain .priority_4{background:lightslategray;}
+#gradeup_explain .priority_5{background:palevioletred;}
+#gradeup_explain .priority_6{background:mediumslateblue;}
+
+/* 타이틀 */
+#gradeup_explain .explain_title_wrap{margin:0px; padding:10px; padding-left:0px; background:white; border:1px solid #ddd;}
+#gradeup_explain .explain_title{font-size:17px; font-weight:bold;}
+#gradeup_explain .explain_title_wrap .admin_link{float:right; margin-top:15px; font-size:15px; font-weight:bold;}
+#gradeup_explain .explain_title_wrap .admin_link img{margin-left:5px; vertical-align:text-top; transition:0.3s; -webkit-transition:0.3s; -moz-transition:0.3s; -o-transition:0.3s;}
+#gradeup_explain .explain_title_wrap .admin_link:hover img{transform:rotate(180deg); -webkit-transform:rotate(180deg); -moz-transform:rotate(180deg); -ms-transform:rotate(180deg); -o-transform:rotate(180deg);}
+#gradeup_explain .explain_title_wrap .explain{margin:5px 0px; margin-left:55px; color:gray;}
+
+/* 등업정보 */
+#gradeup_explain .grade_info_box{margin:10px 0px; padding:5px 10px; border:1px solid #ddd; background:white;}
+#gradeup_explain .grade_info_box .grade_info{margin:25px 0px; position:relative; overflow:hidden;}
+#gradeup_explain .grade_info_box .grade_info .grade_title{float:left; width:130px;}
+#gradeup_explain .grade_info_box .grade_info .group_name{font-weight:bold; color:#333; font-size:13px;}
+#gradeup_explain .grade_info_box .grade_info .grade_condition{float:left;}
+#gradeup_explain .grade_info_box .grade_info .grade_condition div{margin-bottom:10px;}
+#gradeup_explain .grade_info_box .grade_info .grade_condition .condition_type{color:tomato; font-weight:bold;}
+
+/* 회원정보 */
+#gradeup_explain .member_info_box{position:relative; overflow:hidden; margin:10px 0px; padding:10px; border:1px solid #ddd; background:white;}
+#gradeup_explain .member_info_box .member_left_wrap{float:left; width:100px;}
+#gradeup_explain .member_info_box .member_left_wrap .member_profile_img{border:1px solid #eee; border-radius:3px; width:80px; height:80px;}
+#gradeup_explain .member_info_box .member_right_wrap{float:left;}
+#gradeup_explain .member_info_box .member_right_wrap .member_info{padding:5px;}
+#gradeup_explain .member_info_box .member_right_wrap .member_grade_info{padding:5px;}
+
+/* 등업버튼 */
+#gradeup_explain .application_btn{margin:15px 0px; text-align:center;}
+
+/* 신청리스트 */
+#gradeup_explain .user_list{position:relative; margin:0px; background:white; border-collapse:collapse; width:100%; border:1px solid #eee;}
+#gradeup_explain .user_list th{padding:10px 0px; text-align:center; border-right:1px solid #f4f4f4; background:#f8f8f8; color:#555; background:linear-gradient(to bottom,#FFF 0%,#F6F6F6 100%); background:-webkit-gradient(linear,0% 0%,0% 100%,from(#FFF),to(#F6F6F6));}
+#gradeup_explain .user_list td{padding:8px 0px; border-right:1px solid #f4f4f4; text-align:center;}
+#gradeup_explain .user_list td a{color:#000; text-decoration:none;}
+#gradeup_explain .user_list tbody tr{transition:0.2s;}
+#gradeup_explain .user_list tbody tr:nth-child(even){background:#f9f9f9;}
+#gradeup_explain .user_list tbody tr:hover{background:lavender;}
+
+/* 페이지 */
+#gradeup_explain .page_navi{position:relative; width:100%; height:35px; line-height:35px; margin:10px 0px; text-align:center; }
+#gradeup_explain .page_navi a{margin:0px; padding:5px 8px; background:white; border:1px solid #eee; border-radius:3px; transition:0.2s;}
+#gradeup_explain .page_navi a:hover{background:yellowgreen; color:white;}
+#gradeup_explain .page_navi .page_seleted{background:yellowgreen; color:white;}
+
+/* 등업신청폼 + 거절폼 */
+#gradeup_explain .application_form_wrap,
+#gradeup_explain .application_cancel_wrap{position:fixed; width:100%; height:100%; left:0px; top:0px; z-index:100000; display:none;}
+#gradeup_explain .application_bg{position:absolute; width:100%; height:100%; background:black; filter:alpha(opacity=70); opacity:0.7; -moz-opacity:0.7; z-index:1;}
+#gradeup_explain .application_form{position:relative; width:368px; top:15%; margin:0 auto; z-index:2; background:white;}
+#gradeup_explain .application_table{width:100%; border:5px solid #bbb; padding:5px; border-collapse:collapse; margin:0 auto; background:white;}
+#gradeup_explain .application_table th{border:1px solid #bbb; padding:8px; background:#f8f8f8; /* border-right:0px; */ white-space:nowrap;}
+#gradeup_explain .application_table td{border:1px solid #bbb; padding:8px 3px; border-left:0px;}
+#gradeup_explain .application_table .input_text{border:1px solid #fff; border-radius:3px; min-height:30px; width:250px; transition:0.3s background;}
+#gradeup_explain .application_table select{border:1px solid #fff; border-radius:3px; height:35px; line-height:35px; width:200px; transition:0.3s background;}
+#gradeup_explain .application_table textarea{border:1px solid #fff; border-radius:3px; min-height:80px; width:250px; transition:0.3s background;}
+#gradeup_explain .application_table select:hover,
+#gradeup_explain .application_table textarea:hover{border:1px solid #eee; background:#fafafa;}
+
+/* 컬러 */
+#gradeup_explain .red_bg{background:#F3574A; color:white;}
+#gradeup_explain .blue_bg{background:#00A0EF; color:white;}
+#gradeup_explain .green_bg{background:lightseagreen; color:white;}
+#gradeup_explain .gray_bg{background:#fcfcfc;}
+#gradeup_explain .black_bg{background:#555; color:white;}
+
+/* 버튼 */
+#gradeup_explain .ss_btn{
+	display:inline-block;
+	height:26px!important; 
+	line-height:26px!important; 
+	padding:0 10px!important; 
+	border:none; 
+	vertical-align:top;
+	font-size:12px; 
+	cursor:pointer; 
+	border-radius:3px; 
+	font-family:inherit; 
+	text-shadow:0 1px 1px rgba(255, 255, 255, 0.5);
+	box-shadow:inset 0px 1px 1px rgba(255, 255, 255, 0.5), 0px 1px 1px rgba(0, 0, 0, 0.2);
+}

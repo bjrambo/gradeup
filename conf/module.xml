@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+	<permissions>			
+    </permissions>
+	<actions>
+		<action name="procGradeupAdminModuleInfo" type="controller" />						<!--// 기본설정-->
+		<action name="procGradeupAdminGradeConfig" type="controller" />						<!--// 등업설정-->
+		<action name="procGradeupAdminLogList" type="controller" />							<!--// 로그표시항목-->
+		<action name="procGradeupAdminTermGroupModify" type="controller" />					<!--// 기간제등업정보수정-->
+		<action name="procGradeupAdminTermGroupAdd" type="controller" />					<!--// 기간제등업회원추가-->
+		<action name="procGradeupAdminLogDelete" type="controller" />						<!--// 선택로그삭제-->
+		<action name="procGradeupAdminLogDeleteAll" type="controller" />					<!--// 전체로그삭제-->
+		<action name="procGradeupAdminTermLogDelete" type="controller" />					<!--// 선택로그삭제(기간제등업)-->
+		<action name="procGradeupAdminTermLogDeleteAll" type="controller" />				<!--// 전체로그삭제(기간제등업)-->
+		<action name="procGradeupAdminConfirmLogDelete" type="controller" />				<!--// 선택로그삭제(승인등업)-->
+		<action name="procGradeupAdminConfirmLogDeleteAll" type="controller" />				<!--// 전체로그삭제(승인등업)-->
+		<!--///////////////////////////////////////////////////////////////////////////////////////////////////////-->
+		<action name="dispGradeupAdminModuleInfo" type="view" admin_index="true" />			<!--// 기본설정-->
+		<action name="dispGradeupAdminGradeConfig" type="view" />							<!--// 등업설정-->
+		<action name="dispGradeupAdminTermGroup" type="view" />								<!--// 기간제등업관리-->
+		<action name="dispGradeupAdminTermGroupModify" type="view" />						<!--// 기간제등업정보수정-->
+		<action name="dispGradeupAdminTermGroupAdd" type="view" />							<!--// 기간제등업회원추가-->
+		<action name="dispGradeupAdminConfirmGroup" type="view" />							<!--// 승인제등업관리-->
+		<action name="dispGradeupAdminGradeLog" type="view" />								<!--// 등업로그-->
+		<action name="dispGradeupAdminSkinInfo" type="view" />								<!--// 스킨관리-->
+		<action name="dispGradeupAdminGrantInfo" type="view" />								<!--// 권한관리-->
+		<!--///////////////////////////////////////////////////////////////////////////////////////////////////////-->
+		<action name="dispGradeupConfirmGroup" type="view" index="true" />					<!--// 승인등업안내-->
+		<!--///////////////////////////////////////////////////////////////////////////////////////////////////////-->
+		<action name="procGradeupConfirmGroup" type="controller" />							<!--// 승인등업신청-->
+		<action name="procGradeupConfirmGroupProcess" type="controller" />					<!--// 승인등업처리-->
+		<action name="procGradeupConfirmGroupCancel" type="controller" />					<!--// 승인등업취소-->
+	</actions>
+</module>
