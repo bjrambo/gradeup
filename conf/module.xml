@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module>
-	<permissions>			
-    </permissions>
+	<permissions>
+	</permissions>
 	<actions>
 		<action name="procGradeupAdminModuleInfo" type="controller" />						<!--// 기본설정-->
 		<action name="procGradeupAdminGradeConfig" type="controller" />						<!--// 등업설정-->

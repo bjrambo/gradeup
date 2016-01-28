@@ -1,8 +1,8 @@
 <query id="insertGradeUp" action="insert">
-    <tables>
-        <table name="gradeup_log" />
-    </tables>
-    <columns>
+	<tables>
+		<table name="gradeup_log" />
+	</tables>
+	<columns>
 		<column name="log_srl" var="log_srl" />
 		<column name="member_srl" var="member_srl" />
 		<column name="gradeup_type" var="gradeup_type" />
@@ -12,6 +12,6 @@
 		<column name="gradeup_add_type" var="gradeup_add_type" />
 		<column name="regdate" var="regdate" />
 		<column name="remain_date" var="remain_date" />
-        <column name="ipaddress" default="ipaddress()" />
-    </columns>
+		<column name="ipaddress" default="ipaddress()" />
+	</columns>
 </query>
