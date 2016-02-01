@@ -7,7 +7,8 @@
 class gradeupView extends gradeup {
 
 	//초기화
-	function init() {
+	function init()
+	{
 		// 사용자 템플릿 파일의 경로 설정 (skins)
 		$template_path = sprintf("%sskins/%s/",$this->module_path, $this->module_info->skin);
 		if(!is_dir($template_path)||!$this->module_info->skin)
@@ -30,7 +31,8 @@ class gradeupView extends gradeup {
 	}
 
 	//승인등업안내
-	function dispGradeupConfirmGroup(){
+	function dispGradeupConfirmGroup()
+	{
 		//모듈설정 가져오기
 		$oModuleModel = getModel('module');
 		$module_config = $oModuleModel->getModuleConfig('gradeup');
@@ -86,19 +88,25 @@ class gradeupView extends gradeup {
 		$output = $oGradeupModel->getConfirmGroupLog($args);
 
 		//그룹 보기 편하기 정리 (group_srl -> group_title)
-		foreach($output->data as $key => $val){
+		foreach($output->data as $key => $val)
+		{
 			$group_srl = explode('@', $val->old_group_srl);
 			$output->data[$key]->old_group_srl_title = null;
-			foreach($group_srl as $val){
+			foreach($group_srl as $val)
+			{
 				$group_info = $oMemberModel->getGroup($val);
-				if(!$output->data[$key]->old_group_srl_title){
+				if(!$output->data[$key]->old_group_srl_title)
+				{
 					$output->data[$key]->old_group_srl_title = $group_info->title;
-				}else{
+				}
+				else
+				{
 					$output->data[$key]->old_group_srl_title = $group_info->title.', '.$output->data[$key]->old_group_srl_title;
 				}
 			}
 		}
-		foreach($output->data as $key => $val){
+		foreach($output->data as $key => $val)
+		{
 			$group_info = $oMemberModel->getGroup($val->add_group_srl);
 			$val->add_group_srl_title = $group_info->title;
 		}

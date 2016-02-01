@@ -1,5 +1,5 @@
 <table name="gradeup_term_group">
-    <column name="log_srl" type="number" size="11" notnull="notnull" auto_increment="auto_increment" primary_key="primary_key" />
+	<column name="log_srl" type="number" size="11" notnull="notnull" auto_increment="auto_increment" primary_key="primary_key" />
 	<column name="member_srl" type="number" size="11" notnull="notnull" />
 	<column name="old_group_srl" type="varchar" size="128" notnull="notnull" />
 	<column name="new_group_srl" type="varchar" size="128" notnull="notnull" />

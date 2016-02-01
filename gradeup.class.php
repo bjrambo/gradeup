@@ -1,57 +1,60 @@
 <?php
 
-class gradeup extends ModuleObject {
+class gradeup extends ModuleObject
+{
 
-	/*****************************************
-	 * @brief 설치시 추가 작업이 필요할시 구현
-	 ******************************************/
-	function moduleInstall() {
+	var $triggers = array(
+		array('member.doLogin', 'gradeup', 'controller', 'triggerDoLoginAfter','after')
+	);
 
+	function moduleInstall()
+	{
 		return new Object();
 	}
 
-	/************************************************
-	 * @brief 설치가 이상이 없는지 체크하는 method
-	 ************************************************/
-	function checkUpdate() {
 
+	function checkUpdate()
+	{
 		// 모듈정보가 없으면 업데이트
-		$oModuleModel = &getModel('module');
+		$oModuleModel = getModel('module');
 		$module_info = $oModuleModel->getModuleInfoByMid('gradeup');
 		if(!$module_info) return true;
-
+		foreach($this->triggers as $trigger)
+		{
+			if(!$oModuleModel->getTrigger($trigger[0], $trigger[1], $trigger[2], $trigger[3], $trigger[4])) return true;
+		}
 		return false;
 	}
 
-	/****************************************************
-	 * @brief 업데이트 실행
-	 ****************************************************/
-	function moduleUpdate() {
+	function moduleUpdate()
+	{
 
 		//모듈 생성
 		$oModuleModel = &getModel('module');
 		$oModuleController = &getController('module');
 		$module_info = $oModuleModel->getModuleInfoByMid('gradeup');
-		if(!$module_info->module_srl) {
-			$args = null;
+		if(!$module_info->module_srl)
+		{
+			$args = new stdClass;
 			$args->module = 'gradeup';
 			$args->mid = 'gradeup';
 			$args->browser_title = '등업관리 모듈';
 			$oModuleController->insertModule($args);
 		}
 
-		//트리거 설치 (로그인시 자동등업,기간제등업)
-		if(!$oModuleModel->getTrigger('member.doLogin', 'gradeup', 'controller', 'triggerDoLoginAfter','after')){
-			$oModuleController->insertTrigger('member.doLogin', 'gradeup', 'controller', 'triggerDoLoginAfter','after');
+		foreach($this->triggers as $trigger)
+		{
+			if(!$oModuleModel->getTrigger($trigger[0], $trigger[1], $trigger[2], $trigger[3], $trigger[4]))
+			{
+				$oModuleController->insertTrigger($trigger[0], $trigger[1], $trigger[2], $trigger[3], $trigger[4]);
+			}
 		}
 
 		return new Object(0, 'success_updated');
 	}
 
-	/*****************************************************
-	 * @brief 캐시 파일 재생성
-	 *****************************************************/
-	function recompileCache() {
+	function recompileCache()
+	{
 
 	}
 
