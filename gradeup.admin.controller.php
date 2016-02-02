@@ -17,7 +17,7 @@ class gradeupAdminController extends gradeup
 	{
 		//입력값을 모두 받음
 		$obj = Context::getRequestVars();
-		debugPrint($obj);
+
 		$obj->module = 'gradeup';
 		//모듈등록 유무에 따라 insert/update
 		$oModuleController = getController('module');

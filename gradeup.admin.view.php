@@ -89,7 +89,8 @@ class gradeupAdminView extends gradeup
 	{
 		//검색기간설정
 		$search_day = Context::get('search_day');
-		if(!$search_day){
+		if(!$search_day)
+		{
 			$search_day = 'all';
 		}
 		$args = new stdClass();
@@ -219,7 +220,8 @@ class gradeupAdminView extends gradeup
 	}
 
 	//기간제등업관리
-	function dispGradeupAdminTermGroup(){
+	function dispGradeupAdminTermGroup()
+	{
 		//검색기간설정
 		$search_day = Context::get('search_day');
 		if(!$search_day)
@@ -405,7 +407,9 @@ class gradeupAdminView extends gradeup
 				$day_last = 7;
 			}
 			$args->regdate_more = date('Ymd',strtotime(sprintf('-%s day', $day_last)));
-		}else if($search_day == 'moreless'){
+		}
+		else if($search_day == 'moreless')
+		{
 			$day_more = Context::get('day_more');
 			$day_less = Context::get('day_less');
 			if(	$day_more != '')
@@ -488,11 +492,11 @@ class gradeupAdminView extends gradeup
 		}
 
 		//로그구함
-		$oGradeupModel = &getModel('gradeup');
+		$oGradeupModel = getModel('gradeup');
 		$output = $oGradeupModel->getGradeLog($args);
 
 		//그룹 보기 편하기 정리 (group_srl -> group_title)
-		$oMemberModel = &getModel('member');
+		$oMemberModel = getModel('member');
 		foreach($output->data as $key => $val)
 		{
 			$group_srl = explode('@', $val->old_group_srl);
@@ -527,6 +531,7 @@ class gradeupAdminView extends gradeup
 				}
 			}
 		}
+
 		foreach($output->data as $key => $val)
 		{
 			$group_info = $oMemberModel->getGroup($val->add_group_srl);

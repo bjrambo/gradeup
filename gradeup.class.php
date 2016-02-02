@@ -30,8 +30,8 @@ class gradeup extends ModuleObject
 	{
 
 		//모듈 생성
-		$oModuleModel = &getModel('module');
-		$oModuleController = &getController('module');
+		$oModuleModel = getModel('module');
+		$oModuleController = getController('module');
 		$module_info = $oModuleModel->getModuleInfoByMid('gradeup');
 		if(!$module_info->module_srl)
 		{
@@ -55,7 +55,5 @@ class gradeup extends ModuleObject
 
 	function recompileCache()
 	{
-
 	}
-
 }

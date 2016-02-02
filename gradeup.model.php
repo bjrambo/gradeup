@@ -61,7 +61,7 @@ class gradeupModel extends gradeup
 	function getMemberGroups($member_srl)
 	{
 		//회원번호 없을시 리턴
-		if(!$member_srl) return;
+		if(!$member_srl) return array();
 		//그룹정보구함
 		$args = new stdClass();
 		$args->member_srl = $member_srl;
@@ -86,6 +86,7 @@ class gradeupModel extends gradeup
 		$module_config = $oModuleModel->getModuleConfig('gradeup');
 
 		//회원이 속한 그룹의 우선순위를 모두 구한후 가장 높은 우선순위값 반환
+		$priority = null;
 		foreach($logged_info->group_list as $key => $val)
 		{
 			if(!$priority)
@@ -126,9 +127,9 @@ class gradeupModel extends gradeup
 		//레벨조회
 		if($type == 'lv')
 		{
-			$oPointModel = &getModel('point');
+			$oPointModel = getModel('point');
 			$member_point = $oPointModel->getPoint($member_srl);
-			$oModuleModel = &getModel('module');
+			$oModuleModel = getModel('module');
 			$point_config = $oModuleModel->getModuleConfig('point');
 			$member_level = $oPointModel->getLevel($member_point, $point_config->level_step);
 			return $member_level;
