@@ -226,7 +226,7 @@ class gradeupController extends gradeup
 				}
 			}
 		}
-
+		debugPrint($args);
 		//db입력
 		executeQuery('gradeup.insertGradeUpConfirmGroup',$args);
 

@@ -102,7 +102,7 @@ class gradeupModel extends gradeup
 	}
 
 	//게시글갯수,댓글갯수,레벨 조회
-	function getMemberInfo($type,$member_srl,$regdate)
+	function getMemberInfo($type,$member_srl,$regdate = null)
 	{
 		//조건변수 없을시 리턴
 		if(!$type || !$member_srl) return;
@@ -347,7 +347,7 @@ class gradeupModel extends gradeup
 
 
 	//등업 및 로그 기록
-	function gradeUp($gradeup_type, $add_type, $group_srl, $member_srl, $remain_date)
+	function gradeUp($gradeup_type, $add_type, $group_srl, $member_srl, $remain_date = null)
 	{
 		//변수 없을시 리턴
 		if(!$gradeup_type || !$add_type || !$group_srl || !$member_srl) return;

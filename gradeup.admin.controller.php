@@ -141,7 +141,11 @@ class gradeupAdminController extends gradeup
 		$args->old_group_srl = $oGradeupModel->getMemberGroupSrl($obj->member_srl);
 
 		//회원추가
-		executeQuery('gradeup.insertGradeUpTermGroup',$args);
+		$output = executeQuery('gradeup.insertGradeUpTermGroup',$args);
+		if(!$output->toBool())
+		{
+			return $output;
+		}
 
 		//로그화면으로 돌아감
 		$this->setRedirectUrl(getNotEncodedUrl('','module','admin','act','dispGradeupAdminTermGroup'));

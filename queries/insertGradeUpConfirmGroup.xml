@@ -10,10 +10,10 @@
 		<column name="user_text" var="user_text" />
 		<column name="regdate" var="regdate" />
 		<column name="state" var="state" />
-		<column name="condition_date" var="condition_date" />
-		<column name="condition_doc" var="condition_doc" />
-		<column name="condition_com" var="condition_com" />
-		<column name="condition_lv" var="condition_lv" />
+		<column name="condition_date" var="condition_date" default="0" />
+		<column name="condition_doc" var="condition_doc"  default="0" />
+		<column name="condition_com" var="condition_com"  default="0" />
+		<column name="condition_lv" var="condition_lv"  default="0" />
 		<column name="condition_result" var="condition_result" />
 	</columns>
 </query>
