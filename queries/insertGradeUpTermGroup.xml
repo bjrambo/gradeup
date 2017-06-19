@@ -6,7 +6,7 @@
 		<column name="log_srl" var="log_srl" />
 		<column name="member_srl" var="member_srl" />
 		<column name="old_group_srl" var="old_group_srl" />
-		<column name="new_group_srl" var="new_group_srl" />
+		<column name="new_group_srl" var="new_group_srl" default="0" />
 		<column name="add_group_srl" var="add_group_srl" />
 		<column name="gradeup_add_type" var="gradeup_add_type" />
 		<column name="regdate" var="regdate" />
