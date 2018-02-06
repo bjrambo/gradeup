@@ -264,9 +264,6 @@ class gradeupAdminController extends gradeup
 	function procGradeupAdminConfirmLogDeleteAll()
 	{
 		$this->DeleteConfirmLogAll();
-		//auto_increment initialized to number 1
-		// TODO(BJRambo): Find function to Auto_increment initialized.
-
 		$this->initializeAutoIncrement('gradeup_confirm_group');
 		$this->setMessage('success_deleted');
 	}

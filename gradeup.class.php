@@ -2,7 +2,6 @@
 
 class gradeup extends ModuleObject
 {
-
 	var $triggers = array(
 		array('member.doLogin', 'gradeup', 'controller', 'triggerDoLoginAfter','after')
 	);
