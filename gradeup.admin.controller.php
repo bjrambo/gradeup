@@ -1,27 +1,25 @@
 <?php
 
-/*************************************
- **		관리자 컨트롤러 클래스	 	**
- **************************************/
-
 class gradeupAdminController extends gradeup
 {
 
-	//초기화
 	function init()
 	{
 	}
 
-	//관리자 모듈설정저장
+	/**
+	 * Insert module info.
+	 * @return mixed
+	 */
 	function procGradeupAdminModuleInfo()
 	{
-		//입력값을 모두 받음
 		$obj = Context::getRequestVars();
 
 		$obj->module = 'gradeup';
-		//모듈등록 유무에 따라 insert/update
+
+		/** @var moduleController $oModuleController */
 		$oModuleController = getController('module');
-		if(!$obj->module_srl)
+		if (!$obj->module_srl)
 		{
 			$output = $oModuleController->insertModule($obj);
 			$this->setMessage('success_registed');
@@ -31,259 +29,322 @@ class gradeupAdminController extends gradeup
 			$output = $oModuleController->updateModule($obj);
 			$this->setMessage('success_updated');
 		}
+
+		if (!$output->toBool())
+		{
+			return $output;
+		}
+
+		$this->setRedirectUrl(getNotEncodedUrl('', 'module', 'admin', 'act', 'dispGradeupAdminModuleInfo'));
+	}
+
+	/**
+	 * Grade up by module config.
+	 */
+	function procGradeupAdminGradeConfig()
+	{
+		$oModuleModel = getModel('module');
+		$module_config = $oModuleModel->getModuleConfig('gradeup');
+
+		$obj = Context::getRequestVars();
+
+		$oModuleController = getController('module');
+		if (!$module_config)
+		{
+			$module_config = new stdClass();
+		}
+		$module_config->module = 'gradeup';
+		$module_config->gradeup_use = $obj->gradeup_use;
+
+		foreach ($obj->gradeup_condition as $key => $val)
+		{
+			if (!$val['gradeup_priority'])
+			{
+				$obj->gradeup_condition[$key]['gradeup_priority'] = '1';
+			}
+			if (!$val['gradeup_remain_date'])
+			{
+				$obj->gradeup_condition[$key]['gradeup_remain_date'] = '30';
+			}
+		}
+
+		$module_config->gradeup_condition = $obj->gradeup_condition;
+		$module_config->gradeup_msg_use = $obj->gradeup_msg_use;
+		$module_config->garadeup_msg_member_srl = $obj->garadeup_msg_member_srl ? $obj->garadeup_msg_member_srl : 4;
+		$module_config->garadeup_msg_title = $obj->garadeup_msg_title ? $obj->garadeup_msg_title : '축하합니다.';
+		$module_config->gradeup_auto_msg = $obj->gradeup_auto_msg ? $obj->gradeup_auto_msg : '[nick_name]님. [group_name]으로 등업되셨습니다.[enter]앞으로도 많은 활동 부탁드립니다.';
+		$module_config->gradeup_confirm_msg = $obj->gradeup_confirm_msg ? $obj->gradeup_confirm_msg : '[nick_name]님. [group_name]으로 등업되셨습니다.[enter]앞으로도 많은 활동 부탁드립니다.';
+		$module_config->gradeup_term_msg = $obj->gradeup_term_msg ? $obj->gradeup_term_msg : '[nick_name]님. [remain_date]까지 [group_name]으로 등업되셨습니다.[enter]앞으로도 많은 활동 부탁드립니다.';
+		$oModuleController->insertModuleConfig('gradeup', $module_config);
+
+		$this->setRedirectUrl(getNotEncodedUrl('', 'module', 'admin', 'act', 'dispGradeupAdminGradeConfig'));
+	}
+
+	function procGradeupAdminLogList()
+	{
+		$oModuleModel = getModel('module');
+		$module_config = $oModuleModel->getModuleConfig('gradeup');
+
+		$args = Context::getRequestVars();
+		// view_list is array. so if get to view_list is not array, initizlize with array.
+		$module_config->view_list = $args->view_list ? $args->view_list : array(
+			'member_srl',
+			'nick_name',
+			'gradeup_type',
+			'add_group_srl',
+			'old_group_srl',
+			'new_group_srl',
+			'gradeup_add_type',
+			'regdate',
+			'remain_date',
+			'ipaddress'
+		);
+
+		/** @var moduleController $oModuleController */
+		$oModuleController = getController('module');
+		$oModuleController->insertModuleConfig('gradeup', $module_config);
+
+		$this->setMessage('success_updated');
+
+		$this->setRedirectUrl(getNotEncodedUrl('', 'module', 'admin', 'act', 'dispGradeupAdminGradeLog'));
+	}
+
+	function procGradeupAdminTermGroupModify()
+	{
+		$obj = Context::getRequestVars();
+
+		$args = new stdClass();
+		$args->log_srl = $obj->log_srl;
+		$args->remain_date = $obj->remain_date . $obj->remain_date_h . $obj->remain_date_i . $obj->remain_date_s;
+
+		$output = executeQuery('gradeup.updateTermGroupLog', $args);
 		if(!$output->toBool())
 		{
 			return $output;
 		}
-		//모듈시작 화면으로 돌아감
-		$this->setRedirectUrl(getNotEncodedUrl('','module','admin','act','dispGradeupAdminModuleInfo'));
+
+		$this->setRedirectUrl(getNotEncodedUrl('', 'module', 'admin', 'act', 'dispGradeupAdminTermGroupModify', 'log_srl', $obj->log_srl));
 	}
 
-	//등업설정
-	function procGradeupAdminGradeConfig()
-	{
-		//모듈설정 가져오기
-		$oModuleModel = getModel('module');
-		$module_config = $oModuleModel->getModuleConfig('gradeup');
-
-		//입력값을 모두 받음
-		$obj = Context::getRequestVars();
-
-		//모듈설정저장
-		$oModuleController = getController('module');
-		if(!$module_config)
-		{
-			$module_config = new stdClass();
-		}
-		$module_config->module = 'gradeup';	//모듈명
-		$module_config->gradeup_use = $obj->gradeup_use; 					//등업기능 사용여부
-		//등업순위,만료일 빈값일경우 강제지정
-		foreach($obj->gradeup_condition as $key => $val)
-		{
-			if(!$val['gradeup_priority']) $obj->gradeup_condition[$key]['gradeup_priority'] = '1';	//등업순위
-			if(!$val['gradeup_remain_date']) $obj->gradeup_condition[$key]['gradeup_remain_date'] = '30';	//만료일
-		}
-		$module_config->gradeup_condition = $obj->gradeup_condition; 		//그룹별 등업조건
-		$module_config->gradeup_msg_use = $obj->gradeup_msg_use; 			//등업 축하쪽지 사용여부
-		$module_config->garadeup_msg_member_srl = $obj->garadeup_msg_member_srl ? $obj->garadeup_msg_member_srl : 4; 			//쪽지 보내는사람 member_srl
-		$module_config->garadeup_msg_title = $obj->garadeup_msg_title ? $obj->garadeup_msg_title : '축하합니다.'; 			//등업 축하쪽지 제목
-		$module_config->gradeup_auto_msg = $obj->gradeup_auto_msg ? $obj->gradeup_auto_msg : '[nick_name]님. [group_name]으로 등업되셨습니다.[enter]앞으로도 많은 활동 부탁드립니다.' ;			//자동등업 메세지
-		$module_config->gradeup_confirm_msg = $obj->gradeup_confirm_msg ? $obj->gradeup_confirm_msg : '[nick_name]님. [group_name]으로 등업되셨습니다.[enter]앞으로도 많은 활동 부탁드립니다.' ;	//수동등업 메세지
-		$module_config->gradeup_term_msg = $obj->gradeup_term_msg ? $obj->gradeup_term_msg : '[nick_name]님. [remain_date]까지 [group_name]으로 등업되셨습니다.[enter]앞으로도 많은 활동 부탁드립니다.' ;	//기간제등업 메세지
-		$oModuleController->insertModuleConfig('gradeup', $module_config);
-
-		//설정화면으로 돌아감
-		$this->setRedirectUrl(getNotEncodedUrl('','module','admin','act','dispGradeupAdminGradeConfig'));
-	}
-
-	//로그 표시항목
-	function procGradeupAdminLogList()
-	{
-		//모듈설정 가져오기
-		$oModuleModel = getModel('module');
-		$module_config = $oModuleModel->getModuleConfig('gradeup');
-
-		//변수정리
-		$args = Context::getRequestVars();
-		$module_config->view_list = $args->view_list ? $args->view_list : array('member_srl','nick_name','gradeup_type','add_group_srl','old_group_srl','new_group_srl','gradeup_add_type','regdate','remain_date','ipaddress');
-
-		//설정저장
-		$oModuleController = getController('module');
-		$oModuleController->insertModuleConfig('gradeup', $module_config);
-
-		//성공메세지
-		$this->setMessage('success_updated');
-
-		//로그화면으로 돌아감
-		$this->setRedirectUrl(getNotEncodedUrl('','module','admin','act','dispGradeupAdminGradeLog'));
-	}
-
-	//기간제 등업 정보 수정
-	function procGradeupAdminTermGroupModify()
-	{
-		//입력값을 모두 받음
-		$obj = Context::getRequestVars();
-
-		//변수세팅
-		$args = new stdClass();
-		$args->log_srl = $obj->log_srl;
-		$args->remain_date = $obj->remain_date.$obj->remain_date_h.$obj->remain_date_i.$obj->remain_date_s;
-
-		//정보수정
-		executeQuery('gradeup.updateTermGroupLog',$args);
-
-		//이전화면으로 돌아감
-		$this->setRedirectUrl(getNotEncodedUrl('','module','admin','act','dispGradeupAdminTermGroupModify','log_srl',$obj->log_srl));
-	}
-
-	//기간제 등업 회원 추가
+	/**
+	 * Add to term groups.
+	 * @return object
+	 */
 	function procGradeupAdminTermGroupAdd()
 	{
-		//입력값을 모두 받음
 		$obj = Context::getRequestVars();
 
-		//member_srl 없을시 리턴
-		if(!$obj->member_srl)
+		// TODO : It use to return Object?
+		if (!$obj->member_srl)
 		{
 			return;
 		}
 
-		//모델호출
 		$oGradeupModel = getModel('gradeup');
 
-		//변수설정
 		$args = new stdClass();
 		$args->member_srl = $obj->member_srl;
 		$args->add_group_srl = $obj->group_srl;
 		$args->gradeup_add_type = $obj->gradeup_add_type;
-		$args->regdate = $obj->regdate.$obj->regdate_h.$obj->regdate_i.$obj->regdate_s;
-		$args->remain_date = $obj->remain_date.$obj->remain_date_h.$obj->remain_date_i.$obj->remain_date_s;
+		$args->regdate = $obj->regdate . $obj->regdate_h . $obj->regdate_i . $obj->regdate_s;
+		$args->remain_date = $obj->remain_date . $obj->remain_date_h . $obj->remain_date_i . $obj->remain_date_s;
 		$args->old_group_srl = $oGradeupModel->getMemberGroupSrl($obj->member_srl);
 
-		//회원추가
-		$output = executeQuery('gradeup.insertGradeUpTermGroup',$args);
-		if(!$output->toBool())
+		$output = executeQuery('gradeup.insertGradeUpTermGroup', $args);
+		if (!$output->toBool())
 		{
 			return $output;
 		}
 
-		//로그화면으로 돌아감
-		$this->setRedirectUrl(getNotEncodedUrl('','module','admin','act','dispGradeupAdminTermGroup'));
+		$this->setRedirectUrl(getNotEncodedUrl('', 'module', 'admin', 'act', 'dispGradeupAdminTermGroup'));
 	}
 
-	//선택로그 삭제
+	/**
+	 * Delete to log.
+	 * @return object
+	 */
 	function procGradeupAdminLogDelete()
 	{
 		$log_srls = Context::get('log_srls');
-		if(!$log_srls) return new Object(-1,'선택 대상이 없습니다');
-
-		//로그분리
-		$log_srl_list = explode("@",$log_srls);
-		foreach($log_srl_list as $key => $val)
+		if (!$log_srls)
 		{
-			// 루프돌면서 선택된 로그 삭제
+			return new Object(-1, '선택 대상이 없습니다');
+		}
+
+		$log_srl_list = explode("@", $log_srls);
+		foreach ($log_srl_list as $key => $val)
+		{
 			$args = new stdClass();
 			$args->log_srl = $val;
 			$output = $this->DeleteLog($args);
-			if($output->toBool())
+			if (!$output->toBool())
 			{
 				return $output;
 			}
 		}
 		$this->setMessage('success_deleted');
 	}
-	//전체로그 삭제
+
+	/**
+	 * delete All data.
+	 * @return void
+	 */
 	function procGradeupAdminLogDeleteAll()
 	{
 		$this->DeleteLogAll();
-		//auto_increment 초기화 테이블지정 필수
-		$oDB = &DB::getInstance();
-		$query = sprintf("alter table %sgradeup_log auto_increment=1",$oDB->prefix);
-		$query = $oDB->_query($query);
-		$oDB->_fetch($query);
+		$this->initializeAutoIncrement('gradeup_log');
 		$this->setMessage('success_deleted');
 	}
 
-	//선택로그 삭제 (기간제등업)
+	/**
+	 * delete to Term log
+	 * @return Object
+	 */
 	function procGradeupAdminTermLogDelete()
 	{
 		$log_srls = Context::get('log_srls');
-		if(!$log_srls) return new Object(-1,'선택 대상이 없습니다');
-
-		//로그분리
-		$log_srl_list = explode("@",$log_srls);
-		foreach($log_srl_list as $key => $val)
+		if (!$log_srls)
 		{
-			// 루프돌면서 선택된 로그 삭제
+			return new Object(-1, '선택 대상이 없습니다');
+		}
+
+		$log_srl_list = explode("@", $log_srls);
+		foreach ($log_srl_list as $key => $val)
+		{
 			$args = new stdClass();
 			$args->log_srl = $val;
 			$output = $this->DeleteTermLog($args);
-			if($output->toBool())
+			if ($output->toBool())
 			{
 				return $output;
 			}
 		}
 		$this->setMessage('success_deleted');
 	}
-	//전체로그 삭제 (기간제등업)
+
+	/**
+	 * Delete to All term log
+	 */
 	function procGradeupAdminTermLogDeleteAll()
 	{
 		$this->DeleteTermLogAll();
-		//auto_increment 초기화 테이블지정 필수
-		$oDB = &DB::getInstance();
-		$query = sprintf("alter table %sgradeup_term_group auto_increment=1",$oDB->prefix);
-		$query = $oDB->_query($query);
-		$oDB->_fetch($query);
+		$this->initializeAutoIncrement('gradeup_term_group');
 		$this->setMessage('success_deleted');
 	}
 
-	//선택로그 삭제 (승인등업)
+	/**
+	 * Delete to selected log
+	 * @return object
+	 */
 	function procGradeupAdminConfirmLogDelete()
 	{
 		$log_srls = Context::get('log_srls');
-		if(!$log_srls) return new Object(-1,'선택 대상이 없습니다');
+		if (!$log_srls)
+		{
+			return new Object(-1, '선택 대상이 없습니다');
+		}
 
-		//로그분리
-		$log_srl_list = explode("@",$log_srls);
-		foreach($log_srl_list as $key => $val) {
-			// 루프돌면서 선택된 로그 삭제
+		$log_srl_list = explode("@", $log_srls);
+		foreach ($log_srl_list as $key => $val)
+		{
 			$args = new stdClass();
 			$args->log_srl = $val;
 			$output = $this->DeleteConfirmLog($args);
-			if($output->toBool())
+			if ($output->toBool())
 			{
 				return $output;
 			}
 		}
 		$this->setMessage('success_deleted');
 	}
-	//전체로그 삭제 (승인등업)
+
+	/**
+	 * Delete to confirm log
+	 */
 	function procGradeupAdminConfirmLogDeleteAll()
 	{
 		$this->DeleteConfirmLogAll();
-		//auto_increment 초기화 테이블지정 필수
-		$oDB = &DB::getInstance();
-		$query = sprintf("alter table %sgradeup_confirm_group auto_increment=1",$oDB->prefix);
-		$query = $oDB->_query($query);
-		$oDB->_fetch($query);
+		//auto_increment initialized to number 1
+		// TODO(BJRambo): Find function to Auto_increment initialized.
+
+		$this->initializeAutoIncrement('gradeup_confirm_group');
 		$this->setMessage('success_deleted');
 	}
 
-	////////////// 로그삭제를 위한 메서드, module.xml에 등록하지 않음 ★시작★ ////////////////////
-
-	//등업로그삭제
+	/**
+	 * Delete grade up log.
+	 * @param $args
+	 * @return object
+	 */
 	function DeleteLog($args)
-	{ 	//log_srl
-		$output = executeQuery('gradeup.deleteLog',$args);
+	{
+		$output = executeQuery('gradeup.deleteLog', $args);
 		return $output;
 	}
+
+	/**
+	 * Delete All grade up log.
+	 * @return object
+	 */
 	function DeleteLogAll()
 	{
 		$output = executeQuery('gradeup.deleteLog');
 		return $output;
 	}
 
-	//기간제등업로그삭제
+	/**
+	 * Delete Term Log.
+	 * @param $args
+	 * @return object
+	 */
 	function DeleteTermLog($args)
-	{ 	//log_srl
-		$output = executeQuery('gradeup.deleteTermLog',$args);
+	{
+		$output = executeQuery('gradeup.deleteTermLog', $args);
 		return $output;
 	}
+
+	/**
+	 * Delete All term log.
+	 * @return object
+	 */
 	function DeleteTermLogAll()
 	{
 		$output = executeQuery('gradeup.deleteTermLog');
 		return $output;
 	}
 
-	//승인등업로그삭제
+	/**
+	 * Delete confirm log.
+	 * @param $args
+	 * @return object
+	 */
 	function DeleteConfirmLog($args)
-	{ 	//log_srl
-		$output = executeQuery('gradeup.deleteConfirmLog',$args);
+	{
+		$output = executeQuery('gradeup.deleteConfirmLog', $args);
 		return $output;
 	}
+
+	/**
+	 * Delete All Confirm Log.
+	 * @return object
+	 */
 	function DeleteConfirmLogAll()
 	{
 		$output = executeQuery('gradeup.deleteConfirmLog');
 		return $output;
+	}
+
+	/**
+	 * initialize Auto increment
+	 * @param string $string
+	 * @return void
+	 */
+	function initializeAutoIncrement(string $string)
+	{
+		$oDB = &DB::getInstance();
+		$query = sprintf("alter table %s%s auto_increment=1", $oDB->prefix, $string);
+		
+		$query = $oDB->_query($query);
+		$oDB->_fetch($query);
 	}
 }
