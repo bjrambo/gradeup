@@ -9,7 +9,7 @@ class gradeup extends ModuleObject
 
 	function moduleInstall()
 	{
-		return new Object();
+		return new BaseObject();
 	}
 
 
@@ -50,7 +50,7 @@ class gradeup extends ModuleObject
 			}
 		}
 
-		return new Object(0, 'success_updated');
+		return new BaseObject(0, 'success_updated');
 	}
 
 	function recompileCache()
